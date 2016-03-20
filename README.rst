@@ -2,14 +2,16 @@
 stupidlang
 ==========
 
-
+.. image:: https://travis-ci.org/Mynti207/stupidlang.svg?branch=master
+    :target: https://travis-ci.org/Mynti207/stupidlang
+    
 a stupid lispish calculator
 
 
 Description
 ===========
 
-A LONGER DESCRIPTION OF YOUR PROJECT GOES HERE...
+CS207 3/7 lab
 
 
 Note
