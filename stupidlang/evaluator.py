@@ -2,20 +2,22 @@ import math
 import operator as op
 from .parser import parse, Symbol
 
+
 def global_env(envclass):
     "An environment with some Scheme standard procedures."
     env = envclass.empty()
     env.extend_many(vars(math))
     env.extend_many({
-        '+':op.add, '-':op.sub, '*':op.mul, '/':op.truediv,
+        '+': op.add, '-': op.sub, '*': op.mul, '/': op.truediv,
         'abs':     abs,
         'max':     max,
         'min':     min,
         'round':   round,
-        '>':op.gt, '<':op.lt, '>=':op.ge, '<=':op.le, '==':op.eq,
+        '>': op.gt, '<': op.lt, '>=': op.ge, '<=': op.le, '==': op.eq,
         'not':     op.not_
     })
     return env
+
 
 class Function():
     def __init__(self, params, parsedbody, env):
@@ -25,22 +27,23 @@ class Function():
         self.envclass = env.__class__
 
     def __call__(self, *args):
-        funcenv = self.envclass(outerenv = self.env)
+        funcenv = self.envclass(outerenv=self.env)
         funcenv.extend_many(zip(self.params, args))
         return eval_ptree(self.code, funcenv)
 
+
 def eval_ptree(x, env):
-    fmap={'#t':True, '#f':False, 'nil':None}
+    fmap = {'#t': True, '#f': False, 'nil': None}
     if x in ('#t', '#f', 'nil'):
         return fmap[x]
     elif isinstance(x, Symbol):
         # variable lookup
         return env.lookup(x)[0]
-    elif not isinstance(x, list):  # constant
+    elif not isinstance(x, list):   # constant
         return x
-    elif len(x)==0: #noop
+    elif len(x) == 0:  # noop
         return None
-    elif x[0]=='if':
+    elif x[0] == 'if':
         (_, predicate, truexpr, falseexpr) = x
         if eval_ptree(predicate, env):
             expression = truexpr
@@ -49,8 +52,7 @@ def eval_ptree(x, env):
         return eval_ptree(expression, env)
     elif x[0] == 'def':         # variable definition
         (_, var, expression) = x
-        #postorder traversal by nested eval is needed below
-        # your code here
+        # postorder traversal by nested eval is needed below
         env.extend(var, eval_ptree(expression, env))
     elif x[0] == 'store':           # (set! var exp)
         (_, var, exp) = x
@@ -60,9 +62,10 @@ def eval_ptree(x, env):
         return Function(parameters, parsedbody, env)
     else:                          # operator
         op = eval_ptree(x[0], env)
-        #postorder traversal to get subexpressione before running the op
+        # postorder traversal to get subexpressione before running the op
         args = [eval_ptree(arg, env) for arg in x[1:]]
         return op(*args)
+
 
 class Program():
     """
