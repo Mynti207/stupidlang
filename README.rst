@@ -4,7 +4,10 @@ stupidlang
 
 .. image:: https://travis-ci.org/Mynti207/stupidlang.svg?branch=master
     :target: https://travis-ci.org/Mynti207/stupidlang
-    
+
+.. image:: https://coveralls.io/repos/github/Mynti207/stupidlang/badge.svg?branch=master
+    :target: https://coveralls.io/github/Mynti207/stupidlang?branch=master
+
 a stupid lispish calculator
 
 
